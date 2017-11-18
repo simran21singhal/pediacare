@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    android:focusableInTouchMode="true"
+    tools:context="com.example.simransinghal.loginproject.Reception">
+
+<EditText
+    android:layout_width="200dp"
+    android:layout_height="40dp"
+    android:hint="PARENT ID"
+    android:background="@drawable/edit"
+    android:textColorHint="#ffff"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:textColor="#ffff"
+    android:id="@+id/parent"
+    android:layout_marginStart="20dp"
+    android:layout_marginBottom="29dp"
+    android:layout_above="@+id/vaccspinner"
+    android:layout_alignParentStart="true"
+    android:focusableInTouchMode="true"
+    />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button"
+        android:text="Find Child"
+        android:id="@+id/child"
+        android:layout_alignTop="@+id/parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp" />
+    <Spinner
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/childspinner"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/parent"
+        android:layout_marginBottom="74dp"></Spinner>
+    <Button
+        android:layout_width="100sp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/childspinner"
+        android:layout_alignStart="@+id/child"
+        android:background="@drawable/button"
+        android:text="Find Vaccine"
+        android:id="@+id/vaccine" />
+    <Spinner
+        android:layout_width="200sp"
+        android:layout_height="40sp"
+        android:id="@+id/vaccspinner"
+        android:layout_above="@+id/vaccine"
+        android:layout_alignStart="@+id/childspinner"
+        android:layout_marginBottom="31dp"></Spinner>
+    <Button
+        android:layout_width="100sp"
+        android:layout_height="40sp"
+        android:layout_alignTop="@+id/vaccspinner"
+        android:layout_alignStart="@+id/vaccine"
+        android:background="@drawable/button"
+        android:text="PROCEED"
+        android:id="@+id/proceed"
+        />
+</RelativeLayout>

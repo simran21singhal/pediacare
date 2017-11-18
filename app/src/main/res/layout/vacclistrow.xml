@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_vacc"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="start"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_givenon"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_weight=".25"
+            android:gravity="center"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_dueon"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+</LinearLayout>
