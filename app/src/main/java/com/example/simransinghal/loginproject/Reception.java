@@ -1,5 +1,6 @@
 package com.example.simransinghal.loginproject;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,6 +92,18 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
 
                 getVaccineList();
                 vaccine.setClickable(false);
+            }
+        });
+
+        proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Reception.this,QRcodeGenerate.class);
+                i.putExtra("child_id",child_id_list.get(spos1));
+                i.putExtra("child_name",child_name_list.get(spos1));
+                i.putExtra("vacc_id",vacc_id_list.get(spos2));
+                i.putExtra("vacc_name",vacc_name_list.get(spos2));
+                startActivity(i);
             }
         });
 
@@ -205,6 +218,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Reception.this, R.layout.support_simple_spinner_dropdown_item, child_name_list);
                         childspinner.setAdapter(adapter);
+                        childspinner.setOnItemSelectedListener(Reception.this);
                         childspinner.setVisibility(View.VISIBLE);
                         vaccine.setVisibility(View.VISIBLE);
                         child.setClickable(false);
@@ -225,7 +239,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
         String method = "getChildVaccineList";
         String all = "false";
         String child_id = child_id_list.get(spos1);
-        String parentid = "";
+        String parentid = parent_id;
         hitAPI(new DataCallback() {
             @Override
             public void onSuccess(JSONObject result) {
@@ -249,6 +263,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
 
                         ArrayAdapter<String>  vacc = new ArrayAdapter<String>(Reception.this, R.layout.support_simple_spinner_dropdown_item, vacc_name_list);
                         vaccspinner.setAdapter(vacc);
+                        vaccspinner.setOnItemSelectedListener(Reception.this);
                         vaccspinner.setVisibility(View.VISIBLE);
                         proceed.setVisibility(View.VISIBLE);
                     } else {
@@ -270,6 +285,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         Spinner spinner = (Spinner) parent;

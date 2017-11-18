@@ -22,9 +22,8 @@
         </activity>
         <activity android:name=".Vaccine_chart" />
         <activity android:name=".ChildProfile" />
-        <activity android:name=".Reception">
-
-        </activity>
+        <activity android:name=".Reception"></activity>
+        <activity android:name=".QRcodeGenerate"></activity>
     </application>
 
 </manifest>

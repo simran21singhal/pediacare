@@ -194,23 +194,23 @@ public class Vaccine_chart extends AppCompatActivity {
 
                 if(temp != null){
                     boolean flag = true;
-                    if (temp.has("vaccine")){
-                        map.put("vaccine_id",temp.optString("vaccine"));
+                    if (temp.has("vaccine_id")){
+                        map.put("vaccine_id",temp.optString("vaccine_id"));
                     }else{
                         flag = false;
                     }
-                    if (temp.has("name")){
-                        map.put("child_id",temp.optString("name"));
+                    if (temp.has("child_id")){
+                        map.put("child_id",temp.optString("child_id"));
                     }else{
                         flag = false;
                     }
-                    if (temp.has("Expected date")){
-                        map.put("given_on",temp.optString("Expected date"));
+                    if (temp.has("given_on")){
+                        map.put("given_on",temp.optString("given_on"));
                     }else{
                         flag = false;
                     }
-                    if (temp.has("Next Date")){
-                        map.put("due_date",temp.optString("Next Date"));
+                    if (temp.has("due_date")){
+                        map.put("due_date",temp.optString("due_date"));
                     }else{
                         flag = false;
                     }
