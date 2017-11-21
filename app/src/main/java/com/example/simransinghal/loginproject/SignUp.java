@@ -43,9 +43,10 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     Spinner spinner;
     String type[] = {"Select type of Login", "Inventory", "Reception", "Parent"};
     int pos;
-    String tname;
+    String tname, msg;
      String status="false";
     String uuname,password1,password,mail;
+    ProgressDialog progress;
 
 
     @Override
@@ -137,13 +138,21 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         }
 
         else{
-
+             progress = new ProgressDialog(SignUp.this);
+             progress.setMessage("Loading");
+             progress.setCancelable(false);
+             progress.show();
              checkUser(new DataCallback() {
                  @Override
                  public void onSuccess(JSONObject result) {
                      try {
+                         msg = result.getString("message");
+                         status = result.getString("status");
                          signup.setClickable(true);
-                         if(result.getString("status").equalsIgnoreCase("true")){
+                         progress.dismiss();
+                         Toast.makeText(SignUp.this, msg, Toast.LENGTH_LONG).show();
+                         if(status.equalsIgnoreCase("true")){
+
                              Intent i = new Intent(SignUp.this,SignIn.class);
                              emptyInputEditText();
                             // progressDialog.dismiss();
@@ -152,8 +161,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 
                          }else{
                             // progressDialog.dismiss();
-
-                             Toast.makeText(SignUp.this, "Already Registered", Toast.LENGTH_LONG).show();
 
 //                             Snackbar snackbar = Snackbar
 //                                     .make(coordinatorLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
@@ -211,7 +218,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                         try {
                             JSONObject jsonObj = new JSONObject(response);
                             Log.d("message", jsonObj.getString("message"));
-                              setStatus(jsonObj.getString("status"));
+//                              setStatus(jsonObj.getString("status"));
                             callback.onSuccess(jsonObj);
                         } catch (final JSONException e) {
                             Log.d("parse error", e.getMessage());
@@ -222,6 +229,8 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        progress.dismiss();
+                        Toast.makeText(SignUp.this, "Something went wong, Please try again.", Toast.LENGTH_SHORT).show();
                         Log.d("Error.Response", String.valueOf(error));
                     }
                 }
@@ -257,10 +266,10 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         spinner.setSelection(0);
 
     }
-void setStatus(String st){
-    status = st;
-
-}
+//void setStatus(String st){
+//    status = st;
+//
+//}
 
     void init()
     {

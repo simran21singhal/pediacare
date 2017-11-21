@@ -1,6 +1,7 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class Vaccine_chart extends AppCompatActivity {
     List<String> vacc = new ArrayList<String>();
     List<String> given_on = new ArrayList<String>();
     List<String> due_on = new ArrayList<String>();
+    List<String> flag = new ArrayList<String>();
 
     ListView list;
 
@@ -50,6 +52,7 @@ public class Vaccine_chart extends AppCompatActivity {
 
 
     private SharedPrefrences fetch;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,7 @@ public class Vaccine_chart extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
+        scan.setVisibility(View.INVISIBLE);
 
 
     }
@@ -105,6 +109,8 @@ public class Vaccine_chart extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progress.dismiss();
+                        Toast.makeText(Vaccine_chart.this, "Something went wrong. please try again.", Toast.LENGTH_SHORT).show();
                         // error
                         Log.d("Error.Response", String.valueOf(error));
                     }
@@ -158,6 +164,7 @@ public class Vaccine_chart extends AppCompatActivity {
                             vacc.add(arrdata.getString("name"));
                             given_on.add(arrdata.getString("given_on"));
                             due_on.add(arrdata.getString("due_date"));
+                            flag.add(arrdata.getString("flag"));
 
                         }
                         VaccListAdapter adapter = new VaccListAdapter(getLayoutInflater(), vacc, given_on, due_on);
@@ -165,6 +172,12 @@ public class Vaccine_chart extends AppCompatActivity {
 
                     }
                     if (status.equalsIgnoreCase("true")) {
+                        for(String f: flag){
+                            if(f.equalsIgnoreCase("0")){
+                                scan.setVisibility(View.VISIBLE);
+                                break;
+                            }
+                        }
                         Log.d("final status", status);
                     } else {
                         Log.d("mesege", msg);
@@ -216,12 +229,20 @@ public class Vaccine_chart extends AppCompatActivity {
                     }
                     if(flag){
                         //Volley request for qr code
+                        progress = new ProgressDialog(Vaccine_chart.this);
+                        progress.setMessage("Loading");
+                        progress.setCancelable(false);
+                        progress.show();
                         updateVaccineChart();
+                    }else{
+                        Toast.makeText(Vaccine_chart.this, "Something went wrong.QR code error.", Toast.LENGTH_SHORT).show();
                     }
 
+                }else{
+                    Toast.makeText(Vaccine_chart.this, "Something went wrong.QR code error.", Toast.LENGTH_SHORT).show();
                 }
 
-                Toast.makeText(this,"child_id: "+map.get("child_id")+" vaccine_id: "+map.get("vaccine_id")+" given date: "+map.get("given_on")+" due Date: "+map.get("due_date"),Toast.LENGTH_LONG).show();
+               // Toast.makeText(this,"child_id: "+map.get("child_id")+" vaccine_id: "+map.get("vaccine_id")+" given date: "+map.get("given_on")+" due Date: "+map.get("due_date"),Toast.LENGTH_LONG).show();
             }
         }
         else {
@@ -250,13 +271,14 @@ public class Vaccine_chart extends AppCompatActivity {
         String due_date = map.get("due_date");
         String vaccine_id = map.get("vaccine_id");
         cid = map.get("child_id");
-        Log.d("update date: ","method: "+method+" given: "+given_date+"due: "+due_date+" vaccine_id:"+vaccine_id);
+        Log.d("update date: ","method: "+method+" given: "+given_date+"due: "+due_date+" vaccine_id:"+vaccine_id+" child_id: "+cid);
         checkVacObj(new DataCallback() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
                     msg = result.getString("message");
                     status = result.getString("status");
+                    progress.dismiss();
                     //Toast
                     Toast.makeText(Vaccine_chart.this, msg, Toast.LENGTH_LONG).show();
                     if (status.equalsIgnoreCase("true")) {
@@ -264,10 +286,11 @@ public class Vaccine_chart extends AppCompatActivity {
                         //Intent for child whose vaccine chart is updated
                         Intent i = new Intent(Vaccine_chart.this,Vaccine_chart.class);
                         i.putExtra("child_id",cid);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        finish();
                         startActivity(i);
 
                     } else {
-                        Toast.makeText(Vaccine_chart.this, msg, Toast.LENGTH_LONG).show();
                         Log.d("mesege", msg);
                     }
                 } catch (JSONException e) {
@@ -281,7 +304,7 @@ public class Vaccine_chart extends AppCompatActivity {
 
     //*****************scan end************************
 
-    //
+
 }
 
 

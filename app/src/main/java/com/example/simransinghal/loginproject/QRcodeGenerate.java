@@ -1,12 +1,15 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,7 +31,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class QRcodeGenerate extends AppCompatActivity {
+public class QRcodeGenerate extends Fragment {
+    //************************
+    android.support.v4.app.Fragment fragment;
+    FragmentManager fragmentManager;
+    //****************************
     String child_id, child_name, vacc_id, vacc_name, due;
     TextView name, v_name, given_on;
     EditText due_on;
@@ -37,23 +44,35 @@ public class QRcodeGenerate extends AppCompatActivity {
     Map<String, String> map = new HashMap<String, String>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrcode_generate);
-
-        Intent i = getIntent();
-        child_id = i.getStringExtra("child_id");
-        child_name = i.getStringExtra("child_name");
-        vacc_id = i.getStringExtra("vacc_id");
-        vacc_name = i.getStringExtra("vacc_name");
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.qrcode_generate,container,false);
+        fragmentManager = getFragmentManager();
+        Bundle bundle = getArguments();
+        Log.d("bundle",this.getArguments().toString());
 
 
-        name = (TextView) findViewById(R.id.tv_name);
-        v_name = (TextView) findViewById(R.id.vacc);
-        given_on = (TextView) findViewById(R.id.tv_givenon);
-        due_on = (EditText) findViewById(R.id.text4);
-        generate = (Button) findViewById(R.id.gen_btn);
-        image = (ImageView) findViewById(R.id.image);
+
+//        String strtext = getArguments().getString("edttext");
+//        return inflater.inflate(R.layout.fragment, container, false);
+
+//        Intent i = getIntent();
+
+        if(bundle!=null) {
+            child_id = bundle.getString("child_id");
+            child_name = bundle.getString("child_name");
+            vacc_id = bundle.getString("vacc_id");
+            vacc_name = bundle.getString("vacc_name");
+            Log.d("bundle data",child_id);
+
+        }
+
+
+        name = (TextView) v.findViewById(R.id.tv_name);
+        v_name = (TextView) v.findViewById(R.id.vacc);
+        given_on = (TextView) v.findViewById(R.id.tv_givenon);
+        due_on = (EditText) v.findViewById(R.id.text4);
+        generate = (Button)v.findViewById(R.id.gen_btn);
+        image = (ImageView)v.findViewById(R.id.image);
 
 
         name.setText(child_name);
@@ -72,7 +91,7 @@ public class QRcodeGenerate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                DatePickerDialog mdate = new DatePickerDialog(QRcodeGenerate.this, date, myCalendar
+                DatePickerDialog mdate = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH));
                 mdate.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -86,29 +105,35 @@ public class QRcodeGenerate extends AppCompatActivity {
             public void onClick(View view) {
 
                 due = due_on.getText().toString();
+                if(due.length()==0){
+                    due_on.setError("due date is empty");
+                }
+                else {
 
-                map.put("child_id", child_id);
-                map.put("vaccine_id", vacc_id);
-                map.put("given_on", today);
-                map.put("due_date", due);
-                JSONObject obj = new JSONObject(map);
-                Log.d("generate", obj.toString());
+                    map.put("child_id", child_id);
+                    map.put("vaccine_id", vacc_id);
+                    map.put("given_on", today);
+                    map.put("due_date", due);
+                    JSONObject obj = new JSONObject(map);
+                    Log.d("generate", obj.toString());
 
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                try {
-                    BitMatrix bitMatrix = multiFormatWriter.encode(obj.toString(), BarcodeFormat.QR_CODE, 200, 200);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                    image.setImageBitmap(bitmap);
+                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                    try {
+                        BitMatrix bitMatrix = multiFormatWriter.encode(obj.toString(), BarcodeFormat.QR_CODE, 200, 200);
+                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                        image.setImageBitmap(bitmap);
 
 
-                } catch (WriterException e) {
-                    e.printStackTrace();
+                    } catch (WriterException e) {
+                        e.printStackTrace();
 
+                    }
                 }
             }
         });
 
+        return v;
 
     }
 

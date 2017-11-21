@@ -1,11 +1,18 @@
 package com.example.simransinghal.loginproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,13 +40,16 @@ import utils.SharedPrefrences;
  * Created by Simran Singhal on 17-11-2017.
  */
 
-public class Parent extends AppCompatActivity {
+public class Parent extends Fragment {
 
     ListView list;
     Button addbtn;
     List<String> cname = new ArrayList<String>();
     List<String> childid = new ArrayList<String>();
     int pos;
+
+    Fragment fragment;
+    FragmentManager fragmentManager;
 
 
 
@@ -50,51 +60,52 @@ public class Parent extends AppCompatActivity {
     //***********************************
     boolean doubleBackToExitPressedOnce = false;
 
+//    @Override
+//    public void onBackPressed() {
+//
+//        if (doubleBackToExitPressedOnce) {
+//            //super.onBackPressed();
+//            moveTaskToBack(true);
+//            return;
+//        }
+//
+//        this.doubleBackToExitPressedOnce = true;
+//
+//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+//
+//
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                doubleBackToExitPressedOnce = false;
+//            }
+//        }, 2000);
+//    }
+//    //**********************************************************
+
+
     @Override
-    public void onBackPressed() {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.parent, container, false);
 
-        if (doubleBackToExitPressedOnce) {
-            //super.onBackPressed();
-            moveTaskToBack(true);
-            return;
-        }
+        fetch = new SharedPrefrences(getContext());
 
-        this.doubleBackToExitPressedOnce = true;
-
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-    }
-    //**********************************************************
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.parent);
-
-        fetch = new SharedPrefrences(this);
-
-        list = (ListView) findViewById(R.id.lv_list);
-        addbtn = (Button) findViewById(R.id.bt_add);
+        list = (ListView) v.findViewById(R.id.lv_list);
+        addbtn = (Button) v.findViewById(R.id.bt_add);
         addbtn.setVisibility(View.INVISIBLE);
         list.setVisibility(View.INVISIBLE);
 
         getChild();
+
+        return v;
 
     }
 
 
     void checkChild(final DataCallback callback) {
 
-        RequestQueue queue = Volley.newRequestQueue(Parent.this);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://vaccine-api.000webhostapp.com";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -162,7 +173,12 @@ public class Parent extends AppCompatActivity {
                             Log.d("child array name",cname.get(i) );
 
                         }
-                        final GetChildListAdapter adapter = new GetChildListAdapter(getLayoutInflater(), cname, childid);
+                        //---------------------------------------------------------
+                        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        final GetChildListAdapter adapter = new GetChildListAdapter(inflater, cname, childid);
+                        //---------------------------------------------------------------------------------------
+
                         list.setAdapter(adapter);
                         list.setOnItemClickListener(new AdapterView.OnItemClickListener()
 
@@ -171,8 +187,8 @@ public class Parent extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Toast.makeText(view.getContext(), String.valueOf(parent.getAdapter().getItem(position)), Toast.LENGTH_SHORT).show();
                                  pos = (int) adapter.getItemId(position);
-                                Toast.makeText(view.getContext(),"poition is"+pos,Toast.LENGTH_LONG).show();
-                                Toast.makeText(view.getContext(),"child id :"+childid.get(pos),Toast.LENGTH_LONG).show();
+//                                Toast.makeText(view.getContext(),"poition is"+pos,Toast.LENGTH_LONG).show();
+//                                Toast.makeText(view.getContext(),"child id :"+childid.get(pos),Toast.LENGTH_LONG).show();
                                 Intent i = new Intent(view.getContext(), Vaccine_chart.class);
                                 i.putExtra("child_id",childid.get(pos) );
 
@@ -188,8 +204,12 @@ public class Parent extends AppCompatActivity {
                         addbtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent i = new Intent(Parent.this,ChildProfile.class);
-                                startActivity(i);
+
+
+//                                Intent i = new Intent(Parent.this,ChildProfile.class);
+//                                startActivity(i);
+
+
                             }
                         });
 //                        list.setVisibility(View.INVISIBLE);

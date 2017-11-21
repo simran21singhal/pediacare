@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">loginproject</string>
+    <string-array name="nav_menu">
+        <item>ADD CHILD</item>
+        <item>SCAN</item>
+        <item>DUE VACCINES</item>
+        <item>APPLIED VACCINES</item>
+        <item>LOGOUT</item>
+
+    </string-array>
 </resources>

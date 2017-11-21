@@ -12,18 +12,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SignIn" />
-        <activity android:name=".Parent" />
         <activity android:name=".SignUp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".Vaccine_chart" />
-        <activity android:name=".ChildProfile" />
-        <activity android:name=".Reception"></activity>
-        <activity android:name=".QRcodeGenerate"></activity>
+        <activity android:name=".ReceptionActivity" >
+
+        </activity>
+        <activity android:name=".ParentActivity">
+
+        </activity>
+
+        <activity android:name=".Inventory"></activity>
     </application>
 
 </manifest>

@@ -1,66 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
-    android:focusableInTouchMode="true"
-    tools:context="com.example.simransinghal.loginproject.Reception">
+    android:orientation="vertical"
+    tools:context="com.example.simransinghal.loginproject.ReceptionActivity">
 
-<EditText
-    android:layout_width="200dp"
-    android:layout_height="40dp"
-    android:hint="PARENT ID"
-    android:background="@drawable/edit"
-    android:textColorHint="#ffff"
-    android:textSize="20dp"
-    android:gravity="center"
-    android:textColor="#ffff"
-    android:id="@+id/parent"
-    android:layout_marginStart="27dp"
-    android:focusableInTouchMode="true"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true"
-    android:layout_marginTop="92dp" />
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:background="@drawable/button"
-        android:text="Find Child"
-        android:id="@+id/child"
-        android:layout_alignTop="@+id/parent"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="14dp" />
-    <Spinner
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:id="@+id/childspinner"
-        android:layout_alignTop="@+id/vaccine"
-        android:layout_alignStart="@+id/parent"></Spinner>
-    <Button
-        android:layout_width="100sp"
-        android:layout_height="40dp"
-        android:background="@drawable/button"
-        android:text="Find Vaccine"
-        android:id="@+id/vaccine"
-        android:layout_below="@+id/child"
-        android:layout_alignStart="@+id/child"
-        android:layout_marginTop="44dp" />
-    <Spinner
-        android:layout_width="200sp"
-        android:layout_height="40sp"
-        android:id="@+id/vaccspinner"
-        android:layout_below="@+id/childspinner"
-        android:layout_alignStart="@+id/childspinner"
-        android:layout_marginTop="66dp"></Spinner>
-    <Button
-        android:layout_width="100sp"
-        android:layout_height="40sp"
-        android:layout_alignTop="@+id/vaccspinner"
-        android:layout_alignStart="@+id/vaccine"
-        android:background="@drawable/button"
-        android:text="PROCEED"
-        android:id="@+id/proceed"
-        />
-</RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include
+                layout="@layout/toolbar_reception"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/in"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/fragment_replace"
+                android:layout_below="@+id/in"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

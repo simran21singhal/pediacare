@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:background="@drawable/back"
     >
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="180dp"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
         app:srcCompat="@drawable/logo2"
+        android:layout_marginTop="12dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <TextView
@@ -20,11 +21,11 @@
         android:textColor="#000"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="166dp"
+        android:layout_marginStart="34dp"
         android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
 
     <EditText
         android:layout_width="300dp"
@@ -33,10 +34,9 @@
         android:hint="John Jordan "
         android:background="@drawable/edit_text"
         android:drawableLeft="@drawable/name"
-        android:layout_marginTop="12dp"
+        android:id="@+id/editText"
         android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:id="@+id/editText" />
+        android:layout_alignStart="@+id/textView" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,9 +44,8 @@
         android:textColor="#000"
         android:textStyle="bold"
         android:textSize="20dp"
-        android:layout_marginTop="14dp"
         android:id="@+id/textView2"
-        android:layout_below="@+id/editText"
+        android:layout_above="@+id/boy"
         android:layout_alignStart="@+id/editText" />
 
 
@@ -61,32 +60,6 @@
         android:orientation="horizontal"
         >
 
-        <RadioButton
-            android:id="@+id/boy"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text"
-            android:drawableRight="@drawable/boy"
-            android:paddingRight="10dp"
-            android:text="Boy"
-            android:textStyle="bold"
-            android:layout_gravity="start"/>
-
-        <RadioButton
-            android:id="@+id/girl"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_gravity="start"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="98dp"
-            android:background="@drawable/edit_text"
-            android:drawableRight="@drawable/girl"
-            android:paddingRight="10dp"
-            android:text="Girl"
-            android:textStyle="bold"
-            android:checked="true"/>
-
     </RadioGroup>
 
 
@@ -98,9 +71,8 @@
         android:textStyle="bold"
         android:textSize="20dp"
         android:id="@+id/textView3"
-        android:layout_below="@+id/editText2"
-        android:layout_alignStart="@+id/editText2"
-        android:layout_marginTop="18dp" />
+        android:layout_above="@+id/editText3"
+        android:layout_alignStart="@+id/editText3" />
     <EditText
         android:layout_width="300dp"
         android:layout_height="40dp"
@@ -109,9 +81,9 @@
         android:hint=" DD/MM/YYYY"
         android:drawableLeft="@drawable/dob"
         android:id="@+id/editText3"
-        android:layout_below="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginTop="10dp" />
+        android:layout_above="@+id/next"
+        android:layout_alignStart="@+id/boy"
+        android:layout_marginBottom="14dp" />
 
 
     <Button
@@ -123,12 +95,39 @@
         android:textColor="@color/colorPrimary1"
         android:textSize="20dp"
         android:gravity="center"
-        android:layout_marginBottom="21dp"
+        android:layout_marginBottom="12dp"
         android:id="@+id/next"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageView" />
+        android:layout_centerHorizontal="true" />
 
+    <RadioButton
+        android:id="@+id/boy"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="start"
+        android:background="@drawable/edit_text"
+        android:drawableRight="@drawable/boy"
+        android:paddingRight="10dp"
+        android:text="Boy"
+        android:textStyle="bold"
+        android:layout_marginBottom="39dp"
+        android:layout_above="@+id/textView3"
+        android:layout_toStartOf="@+id/girl" />
 
+    <RadioButton
+        android:id="@+id/girl"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="start"
+        android:layout_marginLeft="98dp"
+        android:background="@drawable/edit_text"
+        android:checked="true"
+        android:drawableRight="@drawable/girl"
+        android:paddingRight="10dp"
+        android:text="Girl"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/editText2"
+        android:layout_alignEnd="@+id/editText2" />
 
 
 </RelativeLayout>

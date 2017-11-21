@@ -1,5 +1,6 @@
 package com.example.simransinghal.loginproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +36,9 @@ public class SignIn extends AppCompatActivity {
     private SharedPrefrences session;
     private SharedPrefrences transfer;
 
+    ProgressDialog progress;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +59,19 @@ public class SignIn extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progress = new ProgressDialog(SignIn.this);
+                progress.setMessage("Loading");
+                progress.setCancelable(false);
+                progress.show();
                 attemptLogin();
+
             }
         });
         if (session.isLoggedIn()) {
             //Intent intent=new Intent(this,Parent.class);
 
             //startActivity(intent);
-            Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show();
+
             // finish();
         }
     }
@@ -99,6 +108,8 @@ public class SignIn extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        progress.dismiss();
+                        Toast.makeText(SignIn.this, "Something went wong, Please try again.", Toast.LENGTH_SHORT).show();
                         Log.d("Error.Response", String.valueOf(error));
                     }
                 }
@@ -132,6 +143,8 @@ public class SignIn extends AppCompatActivity {
                     status = result.getString("status");
 
                     Log.d("raw: ", result.toString());
+                    progress.dismiss();
+                    Toast.makeText(SignIn.this, msg, Toast.LENGTH_SHORT).show();
                     if (result.has("data")) {
                         JSONObject data = result.getJSONObject("data");
                         regid = data.getString("reg_id");
@@ -147,7 +160,6 @@ public class SignIn extends AppCompatActivity {
                         Log.d("final data:", name + " " + " " + password);
                     } else {
 
-                        Toast.makeText(SignIn.this, msg, Toast.LENGTH_LONG).show();
 
                     }
                 } catch (JSONException e) {
@@ -166,25 +178,24 @@ public class SignIn extends AppCompatActivity {
 
     void tologin() {
         if(type.equalsIgnoreCase("Parent")) {
-            Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(SignIn.this, Parent.class);
+            Intent i = new Intent(SignIn.this, ParentActivity.class);
             session.setLogin(true);
 
             startActivity(i);
 
         }
         else if(type.equalsIgnoreCase("Reception")) {
-            Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(SignIn.this, Reception.class);
+
+            Intent i = new Intent(SignIn.this, ReceptionActivity.class);
             session.setLogin(true);
 
             startActivity(i);
 
         }
-//        else if(type.equalsIgnoreCase("Reception")) {
-//            Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
-//            Intent i = new Intent(SignIn.this, Reception.class);
-//        }
+        else if(type.equalsIgnoreCase("Inventory")) {
+            Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(SignIn.this, Reception.class);
+        }
         //***********
 
 

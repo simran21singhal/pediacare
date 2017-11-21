@@ -1,11 +1,21 @@
 package com.example.simransinghal.loginproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,11 +41,18 @@ import java.util.Map;
 
 import utils.SharedPrefrences;
 
-public class Reception extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class Reception extends Fragment implements AdapterView.OnItemSelectedListener {
+
 
     String msg, status = "false";
 
+
     private SharedPrefrences fetch;
+
+    //***********************
+    Fragment fragment;
+    FragmentManager fragmentManager;
+    //************************
 
 
     EditText parent;
@@ -44,7 +61,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
     int counter = 0;
 
     String parent_id;
-    int spos1,spos2;
+    int spos1, spos2;
     List<String> child_name_list = new ArrayList<String>();
     List<String> child_id_list = new ArrayList<String>();
 
@@ -52,22 +69,22 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
     List<String> vacc_id_list = new ArrayList<String>();
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reception);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.reception, container, false);
+        fragmentManager = getFragmentManager();
 
-        parent = (EditText) findViewById(R.id.parent);
-        child = (Button) findViewById(R.id.child);
+        parent = (EditText) v.findViewById(R.id.parent);
+        child = (Button) v.findViewById(R.id.child);
 
-        childspinner = (Spinner) findViewById(R.id.childspinner);
-        vaccine = (Button) findViewById(R.id.vaccine);
+        childspinner = (Spinner) v.findViewById(R.id.childspinner);
+        vaccine = (Button) v.findViewById(R.id.vaccine);
 
-        vaccspinner = (Spinner) findViewById(R.id.vaccspinner);
-        proceed = (Button) findViewById(R.id.proceed);
+        vaccspinner = (Spinner) v.findViewById(R.id.vaccspinner);
+        proceed = (Button) v.findViewById(R.id.proceed);
 
-        fetch = new SharedPrefrences(this);
+        fetch = new SharedPrefrences(getContext());
+
 
         childspinner.setVisibility(View.INVISIBLE);
         vaccspinner.setVisibility(View.INVISIBLE);
@@ -98,44 +115,85 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Reception.this,QRcodeGenerate.class);
-                i.putExtra("child_id",child_id_list.get(spos1));
-                i.putExtra("child_name",child_name_list.get(spos1));
-                i.putExtra("vacc_id",vacc_id_list.get(spos2));
-                i.putExtra("vacc_name",vacc_name_list.get(spos2));
-                startActivity(i);
+
+                //************************************
+
+                Bundle bundle = new Bundle();
+
+                bundle.putString("child_id", child_id_list.get(spos1));
+                bundle.putString("child_name", child_name_list.get(spos1));
+                bundle.putString("vacc_id", vacc_id_list.get(spos2));
+                bundle.putString("vacc_name", vacc_name_list.get(spos2));
+                //set Fragmentclass Arguments
+//                QRcodeGenerate fragobj = new QRcodeGenerate();
+//                fragobj.setArguments(bundle);
+
+
+                Log.d("bundle data", child_id_list.get(spos1));
+
+                fragment = fragmentManager.findFragmentByTag("reception");
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                if (fragment != null) {
+                    fragmentTransaction.remove(fragment);
+                }
+                fragment = new QRcodeGenerate();
+                fragment.setArguments(bundle);
+                Log.d("fragment object", fragment.toString());
+                fragmentTransaction.add(R.id.fragment_replace, fragment, "generate");
+                fragmentTransaction.addToBackStack("generate");
+
+
+
+                fragmentTransaction.commit();
+
+
+                //************************************
+
+
+//                Intent i = new Intent(Reception.this,QRcodeGenerate.class);
+//                i.putExtra("child_id",child_id_list.get(spos1));
+//                i.putExtra("child_name",child_name_list.get(spos1));
+//                i.putExtra("vacc_id",vacc_id_list.get(spos2));
+//                i.putExtra("vacc_name",vacc_name_list.get(spos2));
+//
+//               // parent.setText(null);
+//                startActivity(i);
+
             }
         });
+
 
         //***************On touch***************
 
         parent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                    if(b){
-                        Log.d("focus on code","inside focus") ;
-                        childspinner.setVisibility(View.INVISIBLE);
-                        vaccine.setVisibility(View.INVISIBLE);
-                        child.setClickable(true);
-                        child_id_list.clear();
-                        child_name_list.clear();
-                        vacc_id_list.clear();
-                        vacc_name_list.clear();
+                if (b) {
+                    Log.d("focus on code", "inside focus");
+                    childspinner.setVisibility(View.INVISIBLE);
+                    vaccine.setVisibility(View.INVISIBLE);
+                    child.setClickable(true);
+                    child_id_list.clear();
+                    child_name_list.clear();
+                    vacc_id_list.clear();
+                    vacc_name_list.clear();
 
-                        vaccspinner.setVisibility(View.INVISIBLE);
-                        proceed.setVisibility(View.INVISIBLE);
+                    vaccspinner.setVisibility(View.INVISIBLE);
+                    proceed.setVisibility(View.INVISIBLE);
                 }
 
             }
         });
-
+        return v;
 
     }
+
+
 
     //***************VOLLEY METHOD***********************
     void hitAPI(final DataCallback callback, final String method, final String child_id, final String all, final String parentid) {
 
-        RequestQueue queue = Volley.newRequestQueue(Reception.this);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://vaccine-api.000webhostapp.com";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -172,7 +230,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
                 String regid = fetch.getREG_ID();
                 params.put("reg_id", regid);
                 params.put("token", token);
-                if(parentid.length() != 0){
+                if (parentid.length() != 0) {
                     params.put("parent_id", parentid);
                 }
                 if (child_id.length() != 0) {
@@ -181,7 +239,7 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
                 if (all.length() != 0) {
                     params.put("all", all);
                 }
-                Log.d("data:", "reg_id: " + regid + " child_id:" + child_id + " token: " + token + " all: " + all+" parent_id: "+parentid);
+                Log.d("data:", "reg_id: " + regid + " child_id:" + child_id + " token: " + token + " all: " + all + " parent_id: " + parentid);
                 return params;
             }
         };
@@ -216,14 +274,14 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
                     if (status.equalsIgnoreCase("true")) {
                         Log.d("final status", status);
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Reception.this, R.layout.support_simple_spinner_dropdown_item, child_name_list);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, child_name_list);
                         childspinner.setAdapter(adapter);
                         childspinner.setOnItemSelectedListener(Reception.this);
                         childspinner.setVisibility(View.VISIBLE);
                         vaccine.setVisibility(View.VISIBLE);
                         child.setClickable(false);
                     } else {
-                        Toast.makeText(Reception.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                         Log.d("mesege", msg);
                     }
                 } catch (JSONException e) {
@@ -261,13 +319,13 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
                     if (status.equalsIgnoreCase("true")) {
                         Log.d("final status", status);
 
-                        ArrayAdapter<String>  vacc = new ArrayAdapter<String>(Reception.this, R.layout.support_simple_spinner_dropdown_item, vacc_name_list);
+                        ArrayAdapter<String> vacc = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, vacc_name_list);
                         vaccspinner.setAdapter(vacc);
                         vaccspinner.setOnItemSelectedListener(Reception.this);
                         vaccspinner.setVisibility(View.VISIBLE);
                         proceed.setVisibility(View.VISIBLE);
                     } else {
-                        Toast.makeText(Reception.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                         Log.d("mesege", msg);
                     }
                 } catch (JSONException e) {
@@ -279,18 +337,16 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
 
-
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         Spinner spinner = (Spinner) parent;
-        if(spinner.getId() == R.id.childspinner)
-        {
+        if (spinner.getId() == R.id.childspinner) {
             vaccine.setClickable(true);
             parent.getItemAtPosition(position);
             spos1 = position;
@@ -298,18 +354,19 @@ public class Reception extends AppCompatActivity implements AdapterView.OnItemSe
             vacc_id_list.clear();
             vaccspinner.setVisibility(View.INVISIBLE);
             proceed.setVisibility(View.INVISIBLE);
-        }
-        else if(spinner.getId() == R.id.vaccspinner)
-        {
+        } else if (spinner.getId() == R.id.vaccspinner) {
             parent.getItemAtPosition(position);
             spos2 = position;
         }
 
     }
 
-
-
-
-
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        fragmentManager.popBackStack();
+//        System.exit(0);
+//        Log.d("fragmentlyfcycle", "onresume");
+//    }
 
 }

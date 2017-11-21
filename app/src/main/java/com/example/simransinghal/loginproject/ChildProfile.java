@@ -1,11 +1,18 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -35,28 +42,29 @@ import java.util.Map;
 
 import utils.SharedPrefrences;
 
-public class ChildProfile extends AppCompatActivity {
+public class ChildProfile extends Fragment {
     RadioButton rb_male, rb_female;
     RadioGroup grp;
     EditText name, datepicker;
     Button bt_add;
     String c_name, dob, gender = null, msg, status;
     private SharedPrefrences fetch;
-
+    ProgressDialog progress;
+    Fragment fragment;
+    FragmentManager fragmentManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.childprofile);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.childprofile, container, false);
 
-        grp = (RadioGroup) findViewById(R.id.editText2);
-        rb_male = (RadioButton) findViewById(R.id.boy);
-        rb_female = (RadioButton) findViewById(R.id.girl);
-        datepicker = (EditText) findViewById(R.id.editText3);
-        name = (EditText) findViewById(R.id.editText);
-        bt_add = (Button) findViewById(R.id.next);
+        grp = (RadioGroup) v.findViewById(R.id.editText2);
+        rb_male = (RadioButton) v.findViewById(R.id.boy);
+        rb_female = (RadioButton) v.findViewById(R.id.girl);
+        datepicker = (EditText) v.findViewById(R.id.editText3);
+        name = (EditText) v.findViewById(R.id.editText);
+        bt_add = (Button) v.findViewById(R.id.next);
 
-        fetch = new SharedPrefrences(this);
+        fetch = new SharedPrefrences(getContext());
 
 
         datepicker.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +72,7 @@ public class ChildProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                DatePickerDialog mDate =  new DatePickerDialog(ChildProfile.this, date, myCalendar
+                DatePickerDialog mDate =  new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH));
                 mDate.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -77,14 +85,18 @@ public class ChildProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(validate()){
-                  bt_add.setClickable(false);
-//                bt_add.setVisibility(View.INVISIBLE);
+                    progress = new ProgressDialog(getContext());
+                    progress.setMessage("Loading");
+                    progress.setCancelable(false);
+                    progress.show();
+                    bt_add.setClickable(false);
+//                  bt_add.setVisibility(View.INVISIBLE);
                     getRes();
                 }
             }
         });
 
-
+return v;
 
     }
 
@@ -191,7 +203,7 @@ public class ChildProfile extends AppCompatActivity {
 
     void addChild(final DataCallback callback) {
 
-        RequestQueue queue = Volley.newRequestQueue(ChildProfile.this);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://vaccine-api.000webhostapp.com";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -215,6 +227,8 @@ public class ChildProfile extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        progress.dismiss();
+                        Toast.makeText(getContext(), "Something went wong, Please try again.", Toast.LENGTH_SHORT).show();
                         Log.d("Error.Response", String.valueOf(error));
                     }
                 }
@@ -249,18 +263,29 @@ public class ChildProfile extends AppCompatActivity {
                 try {
                     msg = result.getString("message");
                     status = result.getString("status");
-
-
+                    progress.dismiss();
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     if (status.equalsIgnoreCase("true")) {
                         Log.d("final status", status);
-                        Toast.makeText(ChildProfile.this, msg, Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(ChildProfile.this,Parent.class);
-                        startActivity(i);
+                        //************************************************************
+                        fragmentManager = getFragmentManager();
+                        fragment = fragmentManager.findFragmentByTag("profile");
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        if (fragment != null) {
+                            fragmentTransaction.remove(fragment);
+                        }
+                        fragment = new Parent();
+                        fragmentTransaction.add(R.id.fragment_replace, fragment, "parent");
+                        fragmentTransaction.addToBackStack("parent");
+                        fragmentTransaction.commit();
+
+                        //***********************************************************
+//                        Intent i = new Intent(ChildProfile.this,Parent.class);
+//                       startActivity(i);
                     } else {
                         Log.d("mesege", msg);
                         bt_add.setClickable(true);
 //                        bt_add.setVisibility(View.VISIBLE);
-                        Toast.makeText(ChildProfile.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Log.e("parse error", e.getMessage());
