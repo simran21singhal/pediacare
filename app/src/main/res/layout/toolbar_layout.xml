@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:id="@+id/toolbar"
+    android:background="#ce29ad"
+    android:fitsSystemWindows="true"
+    app:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_nav"
+            android:layout_gravity="center"
+            android:src="@drawable/icon1"
+            android:layout_weight=".10"
+            android:clickable="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar_title"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight=".75"
+            android:textColor="#ffffff"
+            android:text="PEDIACARE"
+            />
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.Toolbar>
