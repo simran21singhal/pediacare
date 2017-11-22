@@ -159,63 +159,63 @@ public class Parent extends Fragment {
                 try {
                     msg = result.getString("message");
                     status = result.getString("status");
-                    if (result.has("data")) {
-                        //addbtn.setVisibility(View.INVISIBLE);
-                        list.setVisibility(View.VISIBLE);
+                    if (status.equalsIgnoreCase("true")) {
+                        Log.d("final status", status);
+                        if (result.has("data")) {
+                            //addbtn.setVisibility(View.INVISIBLE);
+                            list.setVisibility(View.VISIBLE);
 
-                        JSONArray arr = result.getJSONArray("data");
-                        Log.d("data parse", arr.toString());
-                        for (int i = 0; i < arr.length(); i++) {
-                            JSONObject arrdata = arr.getJSONObject(i);
-                            childid.add(arrdata.getString("child_id"));
-                            cname.add(arrdata.getString("name"));
-                            Log.d("child array id",childid.get(i) );
-                            Log.d("child array name",cname.get(i) );
-
-                        }
-                        //---------------------------------------------------------
-                        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                        final GetChildListAdapter adapter = new GetChildListAdapter(inflater, cname, childid);
-                        //---------------------------------------------------------------------------------------
-
-                        list.setAdapter(adapter);
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-
-                        {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Toast.makeText(view.getContext(), String.valueOf(parent.getAdapter().getItem(position)), Toast.LENGTH_SHORT).show();
-                                 pos = (int) adapter.getItemId(position);
-//                                Toast.makeText(view.getContext(),"poition is"+pos,Toast.LENGTH_LONG).show();
-//                                Toast.makeText(view.getContext(),"child id :"+childid.get(pos),Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(view.getContext(), Vaccine_chart.class);
-                                i.putExtra("child_id",childid.get(pos) );
-
-                                startActivity(i);
+                            JSONArray arr = result.getJSONArray("data");
+                            Log.d("data parse", arr.toString());
+                            for (int i = 0; i < arr.length(); i++) {
+                                JSONObject arrdata = arr.getJSONObject(i);
+                                childid.add(arrdata.getString("child_id"));
+                                cname.add(arrdata.getString("name"));
+                                Log.d("child array id",childid.get(i) );
+                                Log.d("child array name",cname.get(i) );
 
                             }
+                            //---------------------------------------------------------
+                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                        });
+                            final GetChildListAdapter adapter = new GetChildListAdapter(inflater, cname, childid);
+                            //---------------------------------------------------------------------------------------
+
+                            list.setAdapter(adapter);
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener()
+
+                            {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Toast.makeText(view.getContext(), String.valueOf(parent.getAdapter().getItem(position)), Toast.LENGTH_SHORT).show();
+                                    pos = (int) adapter.getItemId(position);
+//                                Toast.makeText(view.getContext(),"poition is"+pos,Toast.LENGTH_LONG).show();
+//                                Toast.makeText(view.getContext(),"child id :"+childid.get(pos),Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(view.getContext(), Vaccine_chart.class);
+                                    i.putExtra("child_id",childid.get(pos) );
+
+                                    startActivity(i);
+
+                                }
+
+                            });
 
 
-                    } else {
-                        addbtn.setVisibility(View.VISIBLE);
-                        addbtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                        } else {
+                            addbtn.setVisibility(View.VISIBLE);
+                            addbtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
 
 //                                Intent i = new Intent(Parent.this,ChildProfile.class);
 //                                startActivity(i);
 
 
-                            }
-                        });
+                                }
+                            });
 //                        list.setVisibility(View.INVISIBLE);
-                    }
-                    if (status.equalsIgnoreCase("true")) {
-                        Log.d("final status", status);
+                        }
                     } else {
                         Log.d("mesege", msg);
                     }

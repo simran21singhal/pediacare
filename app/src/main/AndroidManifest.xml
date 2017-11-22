@@ -28,7 +28,8 @@
 
         </activity>
 
-        <activity android:name=".Inventory"></activity>
+        <activity android:name=".Inventory_Activity">
+            </activity>
     </application>
 
 </manifest>

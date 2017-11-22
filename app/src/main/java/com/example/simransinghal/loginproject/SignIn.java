@@ -194,7 +194,10 @@ public class SignIn extends AppCompatActivity {
         }
         else if(type.equalsIgnoreCase("Inventory")) {
             Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(SignIn.this, Reception.class);
+            Intent i = new Intent(SignIn.this, Inventory_Activity.class);
+            session.setLogin(true);
+
+            startActivity(i);
         }
         //***********
 

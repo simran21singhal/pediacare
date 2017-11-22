@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:orientation="horizontal"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.6"
+            android:gravity="start"
+            android:text="Vaccine Name"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0.4"
+            android:gravity="start"
+            android:text="Available"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lv">
+
+
+        <ListView
+            android:layout_weight="0.9"
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fab"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="25dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/addicon"/>
+    </FrameLayout>
+
+</LinearLayout>

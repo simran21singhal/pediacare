@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">loginproject</string>
+    <string name="api_url">https://vaccine-api.000webhostapp.com</string>
     <string-array name="nav_menu">
         <item>ADD CHILD</item>
         <item>SCAN</item>
@@ -7,5 +8,11 @@
         <item>APPLIED VACCINES</item>
         <item>LOGOUT</item>
 
+
+    </string-array>
+
+    <string-array name="inv_menu">
+        <item>Consumed</item>
+        <item>Logout</item>
     </string-array>
 </resources>
