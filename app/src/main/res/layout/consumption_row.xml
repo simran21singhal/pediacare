@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_weight="1">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_weight=".15"
+        android:id="@+id/tv_sno"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_weight=".55"
+        android:layout_height="40dp"
+        android:id="@+id/vacc_name"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_weight=".30"
+        android:id="@+id/tv_count"/>
+
+
+</LinearLayout>

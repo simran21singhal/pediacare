@@ -3,6 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lv">
 
 
     <ListView
@@ -11,13 +15,16 @@
         android:id="@+id/lv_list"
         ></ListView>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:text="ADD CHILD"
-        android:id="@+id/bt_add"
-        />
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="25dp"
+        android:layout_gravity="right|bottom"
+        android:src="@drawable/addicon"/>
+
+    </FrameLayout>
 
 
 </LinearLayout>

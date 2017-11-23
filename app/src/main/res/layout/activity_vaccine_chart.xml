@@ -39,19 +39,26 @@
             android:text="Due On"
             android:textSize="20sp" />
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lv">
+
 
     <ListView
         android:id="@+id/lv_list"
         android:layout_weight="0.80"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:layout_gravity="center"
-        android:text="Scan"
-        android:id="@+id/scan"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/scan"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="25dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/qrcode"/>
+    </FrameLayout>
 
 
 </LinearLayout>

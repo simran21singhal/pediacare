@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -120,14 +121,17 @@ public class Inventory_Activity extends AppCompatActivity {
 
                 case 0:
                     drawerLayout.closeDrawer(Gravity.START);
+                    Log.d("postion 0","case 0");
                     //**************************
-                    fragment = fragmentManager.findFragmentByTag("parent");
+                    fragment = fragmentManager.findFragmentByTag("inventory");
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     if (fragment != null) {
+                        Log.d("inside null","inside null");
                         fragmentTransaction.remove(fragment);
                     }
-                    fragment = new ChildProfile();
-                    fragmentTransaction.add(R.id.fragment_replace, fragment, "profile");
+                    fragment = new Consumption();
+                    fragmentTransaction.add(R.id.fragment_replace, fragment, "consumption");
+                    Log.d("consumption click","fragent created");
                     //fragmentTransaction.addToBackStack("profile");
                     fragmentTransaction.commit();
 
@@ -137,7 +141,6 @@ public class Inventory_Activity extends AppCompatActivity {
 
                 case 1:
 
-                case 4:
                     logout();
                     break;
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class Vaccine_chart extends AppCompatActivity {
 
     String msg, status = "false";
     String cid;
-    Button scan;
+    ImageView scan;
 
     List<String> vacc = new ArrayList<String>();
     List<String> given_on = new ArrayList<String>();
@@ -61,7 +62,7 @@ public class Vaccine_chart extends AppCompatActivity {
 
         fetch = new SharedPrefrences(this);
         list = (ListView) findViewById(R.id.lv_list);
-        scan = (Button) findViewById(R.id.scan);
+        scan = (ImageView) findViewById(R.id.scan);
 
         Intent intent = getIntent();
         cid = intent.getStringExtra("child_id");
@@ -169,6 +170,7 @@ public class Vaccine_chart extends AppCompatActivity {
                         }
                         VaccListAdapter adapter = new VaccListAdapter(getLayoutInflater(), vacc, given_on, due_on);
                         list.setAdapter(adapter);
+
 
                     }
                     if (status.equalsIgnoreCase("true")) {
@@ -305,6 +307,13 @@ public class Vaccine_chart extends AppCompatActivity {
     //*****************scan end************************
 
 
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        vacc.clear();
+//        given_on.clear();
+//        due_on.clear();
+//    }
 }
 
 

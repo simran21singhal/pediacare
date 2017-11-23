@@ -1,7 +1,6 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,49 +34,77 @@ import utils.SharedPrefrences;
  * Created by Simran Singhal on 22-11-2017.
  */
 
-public class UpdateStock extends Fragment {
-
-    String vname,vid,stock,duration;
-    String status = "false", msg;
-    ProgressDialog progress;
-    private SharedPrefrences fetch;
-    EditText et_stock;
-    TextView vaccinename,tv_duration;
-    Button update;
+public class AddVaccine extends Fragment {
 
     Fragment fragment;
     FragmentManager fragmentManager;
 
+    boolean flag = true;
+
+
+    String vname,stock,duration;
+    String status = "false", msg;
+    ProgressDialog progress;
+    private SharedPrefrences fetch;
+    EditText et_stock;
+    EditText vaccinename,tv_duration;
+    Button addvacc;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.update_stock, container, false);
+        View v = inflater.inflate(R.layout.updatevaccine, container, false);
+
 
         vaccinename = v.findViewById(R.id.vaccine_name);
         tv_duration = v.findViewById(R.id.duration);
         et_stock = v.findViewById(R.id.stock);
-        update = v.findViewById(R.id.update);
+        addvacc = v.findViewById(R.id.update);
         fetch = new SharedPrefrences(getContext());
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-             vname = bundle.getString("vname");
-             vid = bundle.getString("vid");
-             stock = bundle.getString("stock");
-             duration = bundle.getString("duration");
-        }
-
-        tv_duration.setText(duration);
-        vaccinename.setText(vname);
-        et_stock.setHint(stock);
-//        et_stock.setHint(Integer.parseInt(stock));
 
 
-        update.setOnClickListener(new View.OnClickListener() {
+
+        addvacc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stock=et_stock.getText().toString();
 
-                getResponse();
+                vname = vaccinename.getText().toString();
+                stock = et_stock.getText().toString();
+                duration = tv_duration.getText().toString();
+
+                if (vaccinename.length() == 0) {
+                  vaccinename.setError("Vaccine Name is required");
+                    vaccinename.requestFocus();
+                    flag = false;
+                }
+                if (et_stock.length() == 0) {
+                    et_stock.setError("Stock is required");
+                    et_stock.requestFocus();
+                    flag = false;
+                }else{
+                    if(!stock.trim().matches("^[0-9]\\d*$")){
+                        et_stock.setError("Stock must be a number.");
+                        et_stock.requestFocus();
+                        flag = false;
+                    }
+                }
+                if (tv_duration.length() == 0) {
+                    tv_duration.setError("Duration is required");
+                    tv_duration.requestFocus();
+                    flag = false;
+                }else{
+                    if(!duration.trim().matches("^[0-9]\\d*$")){
+                        tv_duration.setError("Duration must be a number.");
+                        tv_duration.requestFocus();
+                        flag = false;
+                    }
+                }
+
+
+
+                if(flag){
+                    getResponse();
+                }
 
             }
         });
@@ -88,7 +113,8 @@ public class UpdateStock extends Fragment {
         return v;
     }
 
-    void updateVaccineStock(final DataCallback callback) {
+
+    void addVaccine(final DataCallback callback) {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
@@ -124,7 +150,7 @@ public class UpdateStock extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("method", "updateVaccine");
+                params.put("method", "addVaccine");
 
                 String regid = fetch.getREG_ID();
                 String token = fetch.getTOKEN();
@@ -132,7 +158,6 @@ public class UpdateStock extends Fragment {
 
                 params.put("reg_id", regid);
                 params.put("token", token);
-                params.put("vaccine_id", vid);
                 params.put("name", vname);
                 params.put("duration", duration);
                 params.put("stock", stock);
@@ -146,7 +171,7 @@ public class UpdateStock extends Fragment {
     }
 
     void getResponse(){
-        updateVaccineStock(new DataCallback() {
+        addVaccine(new DataCallback() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
@@ -158,7 +183,7 @@ public class UpdateStock extends Fragment {
 
                         fragmentManager = getFragmentManager();
 
-                        fragment = fragmentManager.findFragmentByTag("stock");
+                        fragment = fragmentManager.findFragmentByTag("add_vacc");
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         if (fragment != null) {
                             fragmentTransaction.remove(fragment);
@@ -168,9 +193,9 @@ public class UpdateStock extends Fragment {
                         //fragmentTransaction.addToBackStack("inventory");
                         fragmentTransaction.commit();
 
-                        }
+                    }
 
-                     else {
+                    else {
                         Toast.makeText(getContext(),msg, Toast.LENGTH_SHORT).show();
 
                     }

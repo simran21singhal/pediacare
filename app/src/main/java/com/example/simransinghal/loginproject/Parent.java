@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,7 +44,7 @@ import utils.SharedPrefrences;
 public class Parent extends Fragment {
 
     ListView list;
-    Button addbtn;
+    ImageView fab;
     List<String> cname = new ArrayList<String>();
     List<String> childid = new ArrayList<String>();
     int pos;
@@ -57,32 +58,6 @@ public class Parent extends Fragment {
     private SharedPrefrences fetch;
 
 
-    //***********************************
-    boolean doubleBackToExitPressedOnce = false;
-
-//    @Override
-//    public void onBackPressed() {
-//
-//        if (doubleBackToExitPressedOnce) {
-//            //super.onBackPressed();
-//            moveTaskToBack(true);
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//
-//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-//
-//
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2000);
-//    }
-//    //**********************************************************
 
 
     @Override
@@ -92,9 +67,30 @@ public class Parent extends Fragment {
         fetch = new SharedPrefrences(getContext());
 
         list = (ListView) v.findViewById(R.id.lv_list);
-        addbtn = (Button) v.findViewById(R.id.bt_add);
-        addbtn.setVisibility(View.INVISIBLE);
+
+         fab = (ImageView) v.findViewById(R.id.fab);
+
         list.setVisibility(View.INVISIBLE);
+
+        fragmentManager = getFragmentManager();
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                fragment = fragmentManager.findFragmentByTag("parent");
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                if (fragment != null) {
+                    fragmentTransaction.remove(fragment);
+                }
+                fragment = new ChildProfile();
+                fragmentTransaction.add(R.id.fragment_replace, fragment, "profile");
+                fragmentTransaction.addToBackStack("parent");
+                fragmentTransaction.commit();
+            }
+        });
+
 
         getChild();
 
@@ -162,7 +158,6 @@ public class Parent extends Fragment {
                     if (status.equalsIgnoreCase("true")) {
                         Log.d("final status", status);
                         if (result.has("data")) {
-                            //addbtn.setVisibility(View.INVISIBLE);
                             list.setVisibility(View.VISIBLE);
 
                             JSONArray arr = result.getJSONArray("data");
@@ -202,19 +197,8 @@ public class Parent extends Fragment {
 
 
                         } else {
-                            addbtn.setVisibility(View.VISIBLE);
-                            addbtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
 
 
-//                                Intent i = new Intent(Parent.this,ChildProfile.class);
-//                                startActivity(i);
-
-
-                                }
-                            });
-//                        list.setVisibility(View.INVISIBLE);
                         }
                     } else {
                         Log.d("mesege", msg);
@@ -226,5 +210,10 @@ public class Parent extends Fragment {
         });
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        cname.clear();
+        childid.clear();
+    }
 }

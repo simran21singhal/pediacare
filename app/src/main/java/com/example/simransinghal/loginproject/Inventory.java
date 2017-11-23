@@ -77,6 +77,17 @@ public class Inventory extends Fragment {
             @Override
             public void onClick(View view) {
                 // Click action
+                fragment = fragmentManager.findFragmentByTag("inventory");
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                if (fragment != null) {
+                    fragmentTransaction.remove(fragment);
+                }
+                fragment = new AddVaccine();
+                fragmentTransaction.add(R.id.fragment_replace, fragment, "add_vacc");
+                fragmentTransaction.addToBackStack("add_vacc");
+
+
+                fragmentTransaction.commit();
 
 
             }
@@ -178,6 +189,7 @@ public class Inventory extends Fragment {
 
                                 }
                                 //---------------------------------------------------------
+
                                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //                                Context cont;
 //                                cont=getActivity();

@@ -43,7 +43,7 @@ public class ParentActivity extends AppCompatActivity {
 
 
     DrawerLayout drawerLayout;
-    Boolean mSlideState=false;
+    Boolean mSlideState = false;
     ListView listView;
     String parent_id, nav_arr[];
     ImageView nav;
@@ -75,15 +75,14 @@ public class ParentActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         listView = (ListView) findViewById(R.id.drawerList);
-        nav_arr= getResources().getStringArray(R.array.nav_menu);
+        nav_arr = getResources().getStringArray(R.array.nav_menu);
         toolbar = (Toolbar) findViewById(R.id.in);
-         pid = (TextView) findViewById(R.id.nav_p_id);
+        pid = (TextView) findViewById(R.id.nav_p_id);
 
         nav = (ImageView) findViewById(R.id.iv_nav);
 
         parent_id = fetch.getREG_ID();
-        parent_id="Parent ID : "+parent_id;
-
+        parent_id = "Parent ID : " + parent_id;
 
 
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, nav_arr));
@@ -96,37 +95,37 @@ public class ParentActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawerLayout.addDrawerListener(new ActionBarDrawerToggle(ParentActivity.this,drawerLayout,toolbar,
+        drawerLayout.addDrawerListener(new ActionBarDrawerToggle(ParentActivity.this, drawerLayout, toolbar,
                 0,
-                0){
+                0) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mSlideState=false;//is Closed
+                mSlideState = false;//is Closed
             }
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mSlideState=true;//is Opened
-            }});
-
+                mSlideState = true;//is Opened
+            }
+        });
 
 
         nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(mSlideState){
+                if (mSlideState) {
                     drawerLayout.closeDrawer(Gravity.START);
-                }else{
+                } else {
                     drawerLayout.openDrawer(Gravity.START);
                 }
 
 
             }
         });
-
 
 
     }
@@ -140,7 +139,7 @@ public class ParentActivity extends AppCompatActivity {
 //            Toast.makeText(ParentActivity.this, planets[position] + "  was clicked", Toast.LENGTH_SHORT).show();
 
 
-            switch (position){
+            switch (position) {
 
                 case 0:
                     drawerLayout.closeDrawer(Gravity.START);
@@ -152,7 +151,7 @@ public class ParentActivity extends AppCompatActivity {
                     }
                     fragment = new ChildProfile();
                     fragmentTransaction.add(R.id.fragment_replace, fragment, "profile");
-                    //fragmentTransaction.addToBackStack("profile");
+                    fragmentTransaction.addToBackStack("parent");
                     fragmentTransaction.commit();
 
                     //*************************************
@@ -161,7 +160,9 @@ public class ParentActivity extends AppCompatActivity {
 
                 case 1:
 
-                case 4:
+                case 2:
+
+                case 3:
                     logout();
                     break;
 
@@ -189,20 +190,19 @@ public class ParentActivity extends AppCompatActivity {
         progress.show();
         session1.setLogin(false);
         fragmentManager.popBackStack();
-        Intent i = new Intent(ParentActivity.this,SignIn.class);
+        Intent i = new Intent(ParentActivity.this, SignIn.class);
         startActivity(i);
         finish();
 
     }
 
 
-
-
     //***************back button exit
     boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+//        super.onBackPressed();
 
         if (doubleBackToExitPressedOnce) {
             moveTaskToBack(true);

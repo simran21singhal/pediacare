@@ -3,7 +3,6 @@
     <string name="api_url">https://vaccine-api.000webhostapp.com</string>
     <string-array name="nav_menu">
         <item>ADD CHILD</item>
-        <item>SCAN</item>
         <item>DUE VACCINES</item>
         <item>APPLIED VACCINES</item>
         <item>LOGOUT</item>
