@@ -29,7 +29,9 @@ public class SharedPrefrences {
         return this.sharePresfs.getString("TOKEN","hgvgvn");
     }
 
-
+    public String getTYPE() {
+        return this.sharePresfs.getString("TYPE","vghvjhb");
+    }
 
     public SharedPrefrences(Context context) {
         this.sharePresfs = context.getSharedPreferences("pediacare", Context.MODE_PRIVATE);
@@ -47,6 +49,11 @@ public class SharedPrefrences {
     public void putToken(String token) {
         editor = sharePresfs.edit();
         editor.putString("TOKEN", token);
+        editor.commit();
+    }
+    public void putType(String type) {
+        editor = sharePresfs.edit();
+        editor.putString("TYPE", type);
         editor.commit();
     }
 

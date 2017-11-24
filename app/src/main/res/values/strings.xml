@@ -4,7 +4,7 @@
     <string-array name="nav_menu">
         <item>ADD CHILD</item>
         <item>DUE VACCINES</item>
-        <item>APPLIED VACCINES</item>
+        <item>RECENTLY APPLIED VACCINES</item>
         <item>LOGOUT</item>
 
 

@@ -53,22 +53,23 @@ public class Parent extends Fragment {
     FragmentManager fragmentManager;
 
 
-
     String msg, status = "false";
     private SharedPrefrences fetch;
-
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.parent, container, false);
 
+        cname.clear();
+        childid.clear();
+
+
         fetch = new SharedPrefrences(getContext());
 
         list = (ListView) v.findViewById(R.id.lv_list);
 
-         fab = (ImageView) v.findViewById(R.id.fab);
+        fab = (ImageView) v.findViewById(R.id.fab);
 
         list.setVisibility(View.INVISIBLE);
 
@@ -166,8 +167,8 @@ public class Parent extends Fragment {
                                 JSONObject arrdata = arr.getJSONObject(i);
                                 childid.add(arrdata.getString("child_id"));
                                 cname.add(arrdata.getString("name"));
-                                Log.d("child array id",childid.get(i) );
-                                Log.d("child array name",cname.get(i) );
+                                Log.d("child array id", childid.get(i));
+                                Log.d("child array name", cname.get(i));
 
                             }
                             //---------------------------------------------------------
@@ -187,7 +188,7 @@ public class Parent extends Fragment {
 //                                Toast.makeText(view.getContext(),"poition is"+pos,Toast.LENGTH_LONG).show();
 //                                Toast.makeText(view.getContext(),"child id :"+childid.get(pos),Toast.LENGTH_LONG).show();
                                     Intent i = new Intent(view.getContext(), Vaccine_chart.class);
-                                    i.putExtra("child_id",childid.get(pos) );
+                                    i.putExtra("child_id", childid.get(pos));
 
                                     startActivity(i);
 
@@ -197,7 +198,6 @@ public class Parent extends Fragment {
 
 
                         } else {
-
 
                         }
                     } else {
@@ -210,10 +210,5 @@ public class Parent extends Fragment {
         });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        cname.clear();
-        childid.clear();
-    }
+
 }

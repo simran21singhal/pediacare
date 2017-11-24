@@ -1,6 +1,7 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +42,9 @@ public class Inventory_Activity extends AppCompatActivity {
 
     Bundle dummy_bundle;
 
+    AlertDialog.Builder alertDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,6 +52,8 @@ public class Inventory_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
 
         dummy_bundle = savedInstanceState;
+
+        alertDialog = new AlertDialog.Builder(Inventory_Activity.this);
 
 //************************************
         fragmentManager = getSupportFragmentManager();
@@ -108,6 +115,29 @@ public class Inventory_Activity extends AppCompatActivity {
             }
         });
 
+        alertDialog.setTitle("CONFIRM EXIT");
+        alertDialog.setMessage("Are you sure you want EXIT?");
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Write your code here to invoke YES event
+//                System.exit(2);
+                finish();
+//                Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+                Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
+
 
     }
 
@@ -121,18 +151,15 @@ public class Inventory_Activity extends AppCompatActivity {
 
                 case 0:
                     drawerLayout.closeDrawer(Gravity.START);
-                    Log.d("postion 0","case 0");
                     //**************************
                     fragment = fragmentManager.findFragmentByTag("inventory");
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     if (fragment != null) {
-                        Log.d("inside null","inside null");
                         fragmentTransaction.remove(fragment);
                     }
                     fragment = new Consumption();
                     fragmentTransaction.add(R.id.fragment_replace, fragment, "consumption");
-                    Log.d("consumption click","fragent created");
-                    //fragmentTransaction.addToBackStack("profile");
+                    fragmentTransaction.addToBackStack("consumption");
                     fragmentTransaction.commit();
 
                     //*************************************
@@ -166,28 +193,20 @@ public class Inventory_Activity extends AppCompatActivity {
 
 
     //***************back button exit
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
 
-        if (doubleBackToExitPressedOnce) {
-            moveTaskToBack(true);
-            return;
+        if(getSupportFragmentManager().getBackStackEntryCount()==0)
+        {
+            alertDialog.show();
+        }
+        else
+        {
+            super.onBackPressed();
+            getSupportFragmentManager().popBackStack();
         }
 
-        this.doubleBackToExitPressedOnce = true;
 
-        Toast.makeText(Inventory_Activity.this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
     }
 }

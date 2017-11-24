@@ -120,6 +120,9 @@ public class Consumption extends Fragment {
         btnfetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vname.clear();
+                sno.clear();
+                count.clear();
                 if(datepicker.length() == 0){
                     datepicker.setError("Date is required");
                 }else{

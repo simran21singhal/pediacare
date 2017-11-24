@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utils.SharedPrefrences;
+
 /**
  * Created by TANVIPC on 02-11-2017.
  */
@@ -43,9 +45,12 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     Spinner spinner;
     String type[] = {"Select type of Login", "Inventory", "Reception", "Parent"};
     int pos;
-    String tname, msg;
+    String tname, msg,sp_type;
      String status="false";
     String uuname,password1,password,mail;
+    private SharedPrefrences session;
+    private SharedPrefrences fetch;
+
     ProgressDialog progress;
 
 
@@ -54,10 +59,10 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
 
-//        progressDialog=new ProgressDialog(this);
-//        progressDialog.setTitle("Loading.....");
-//        progressDialog.setMessage("Please wait...");
-//        progressDialog.setCancelable(true);
+
+        session = new SharedPrefrences(this);
+        fetch=new SharedPrefrences(this);
+
 
 
         signup = (Button) findViewById(R.id.button);
@@ -72,6 +77,33 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, type);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(SignUp.this);
+
+
+        //--------
+        sp_type=fetch.getTYPE();
+        Log.d("sign up gettype",sp_type);
+
+        if (session.isLoggedIn()) {
+
+            if(sp_type.equalsIgnoreCase("parent")){
+                Log.d("inside if","parent");
+            Intent intent=new Intent(this,ParentActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            }
+            else if(sp_type.equalsIgnoreCase("Reception")){
+                Intent intent=new Intent(this,ReceptionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+            else if(sp_type.equalsIgnoreCase("Inventory")){
+                Intent intent=new Intent(this,Inventory_Activity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+            finish();
+        }
 
 
         signup.setOnClickListener(new View.OnClickListener() {

@@ -67,13 +67,7 @@ public class SignIn extends AppCompatActivity {
 
             }
         });
-        if (session.isLoggedIn()) {
-            //Intent intent=new Intent(this,Parent.class);
 
-            //startActivity(intent);
-
-            // finish();
-        }
     }
 
 
@@ -153,11 +147,11 @@ public class SignIn extends AppCompatActivity {
                         tokenid = data.getString("token");
                         transfer.putToken(tokenid);
                         type = data.getString("type");
+                          transfer.putType(type);
                     }
                     if (status.equalsIgnoreCase("true")) {
                         tologin();
-
-                        Log.d("final data:", name + " " + " " + password);
+                        Log.d("final data:", name + " " + " " + password+" "+type);
                     } else {
 
 
@@ -178,24 +172,30 @@ public class SignIn extends AppCompatActivity {
 
     void tologin() {
         if(type.equalsIgnoreCase("Parent")) {
-            Intent i = new Intent(SignIn.this, ParentActivity.class);
+
             session.setLogin(true);
+
+            Intent i = new Intent(SignIn.this, ParentActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             startActivity(i);
 
         }
         else if(type.equalsIgnoreCase("Reception")) {
+            session.setLogin(true);
 
             Intent i = new Intent(SignIn.this, ReceptionActivity.class);
-            session.setLogin(true);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             startActivity(i);
 
         }
         else if(type.equalsIgnoreCase("Inventory")) {
-            Toast.makeText(this, "akad bakad", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(SignIn.this, Inventory_Activity.class);
+
             session.setLogin(true);
+
+            Intent i = new Intent(SignIn.this, Inventory_Activity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             startActivity(i);
         }
@@ -206,12 +206,9 @@ public class SignIn extends AppCompatActivity {
         finish();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Log.d("i am here","pagal");
-//        //finish();
-//
-//        System.exit(0);
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }

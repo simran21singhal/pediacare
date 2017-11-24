@@ -1,11 +1,13 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,12 +29,17 @@ public class ReceptionActivity extends AppCompatActivity {
     ProgressDialog progress;
     Toolbar toolbar;
 
+    AlertDialog.Builder alertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reception);
 
-         toolbar = (Toolbar) findViewById(R.id.in);
+        alertDialog = new AlertDialog.Builder(ReceptionActivity.this);
+
+
+        toolbar = (Toolbar) findViewById(R.id.in);
 
 
         //Log.d("tooolbar", toolbar.toString());
@@ -48,22 +55,31 @@ public class ReceptionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+        alertDialog.setTitle("CONFIRM EXIT");
+        alertDialog.setMessage("Are you sure you want EXIT?");
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Write your code here to invoke YES event
+//                System.exit(2);
+                finish();
+//                Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+                Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
     }
 
-//        toolbar.setOnMenuItemClickListener(
-//                new Toolbar.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        // Handle menu item click event
-//                        int id = item.getItemId();
-//                        switch (id) {
-//                            case R.id.logout:
-//                                Toast.makeText(ReceptionActivity.this, "Logout", Toast.LENGTH_SHORT).show();
-//                                logout();
-//                        }
-//                        return true;
-//                    }
-//                });
 
 
 
@@ -102,34 +118,20 @@ public class ReceptionActivity extends AppCompatActivity {
     }
 
     //***************back button exit
-    boolean doubleBackToExitPressedOnce = false;
-int c=0;
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        ++c;
 
-//if(c==2)
-//    System.exit(0);
+        @Override
+        public void onBackPressed() {
 
-        if (doubleBackToExitPressedOnce) {
-            moveTaskToBack(true);
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-
-        Toast.makeText(ReceptionActivity.this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-        Log.d("val of c",Integer.toString(c));
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                Log.d("val of c in run",Integer.toString(c));
-
-                doubleBackToExitPressedOnce = false;
+            if(getSupportFragmentManager().getBackStackEntryCount()==0)
+            {
+                alertDialog.show();
             }
-        }, 2000);
-   }
+            else
+            {
+                super.onBackPressed();
+                getSupportFragmentManager().popBackStack();
+            }
+
+
+        }
 }

@@ -1,6 +1,7 @@
 package com.example.simransinghal.loginproject;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,7 +45,7 @@ public class ParentActivity extends AppCompatActivity {
 
 
     DrawerLayout drawerLayout;
-    Boolean mSlideState = false;
+    Boolean mSlideState = false, flag = false, doubleBackToExitPressedOnce = false;
     ListView listView;
     String parent_id, nav_arr[];
     ImageView nav;
@@ -51,6 +53,8 @@ public class ParentActivity extends AppCompatActivity {
     TextView pid;
 
     Bundle dummy_bundle;
+
+    AlertDialog.Builder alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,9 @@ public class ParentActivity extends AppCompatActivity {
         fetch = new SharedPrefrences(this);
 
         dummy_bundle = savedInstanceState;
+//---------------------------------------------------
 
+        alertDialog = new AlertDialog.Builder(ParentActivity.this);
 //************************************
         fragmentManager = getSupportFragmentManager();
 
@@ -126,6 +132,28 @@ public class ParentActivity extends AppCompatActivity {
 
             }
         });
+        //-------------------------------
+        alertDialog.setTitle("CONFIRM EXIT");
+        alertDialog.setMessage("Are you sure you want EXIT?");
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Write your code here to invoke YES event
+                System.exit(2);
+//                finish();
+                Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+                Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
 
 
     }
@@ -148,10 +176,12 @@ public class ParentActivity extends AppCompatActivity {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     if (fragment != null) {
                         fragmentTransaction.remove(fragment);
+                        fragmentManager.popBackStackImmediate();
+
                     }
                     fragment = new ChildProfile();
                     fragmentTransaction.add(R.id.fragment_replace, fragment, "profile");
-                    fragmentTransaction.addToBackStack("parent");
+                    fragmentTransaction.addToBackStack("profile");
                     fragmentTransaction.commit();
 
                     //*************************************
@@ -159,8 +189,44 @@ public class ParentActivity extends AppCompatActivity {
                     break;
 
                 case 1:
+                    drawerLayout.closeDrawer(Gravity.START);
+                    //**************************
+                    fragment = fragmentManager.findFragmentByTag("parent");
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    if (fragment != null) {
+                        ft.remove(fragment);
+                        fragmentManager.popBackStackImmediate();
+
+                    }
+                    fragment = new DueNavBar();
+                    ft.add(R.id.fragment_replace, fragment, "duefrag");
+                    ft.addToBackStack("duefrag");
+                    ft.commit();
+
+                    //*************************************
+
+                    break;
 
                 case 2:
+                    drawerLayout.closeDrawer(Gravity.START);
+                    //**************************
+                    fragment = fragmentManager.findFragmentByTag("parent");
+                    FragmentTransaction ft1 = fragmentManager.beginTransaction();
+                    if (fragment != null) {
+                        ft1.remove(fragment);
+                        fragmentManager.popBackStackImmediate();
+
+
+                    }
+                    fragment = new RecentNavBar();
+                    ft1.add(R.id.fragment_replace, fragment, "recentfrag");
+                    ft1.addToBackStack("recentfrag");
+                    ft1.commit();
+
+                    //*************************************
+
+                    break;
+
 
                 case 3:
                     logout();
@@ -192,35 +258,26 @@ public class ParentActivity extends AppCompatActivity {
         fragmentManager.popBackStack();
         Intent i = new Intent(ParentActivity.this, SignIn.class);
         startActivity(i);
+        progress.dismiss();
         finish();
 
     }
 
 
-    //***************back button exit
-    boolean doubleBackToExitPressedOnce = false;
-
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
 
-        if (doubleBackToExitPressedOnce) {
-            moveTaskToBack(true);
-            return;
+        if(getSupportFragmentManager().getBackStackEntryCount()==0)
+        {
+            alertDialog.show();
+        }
+        else
+        {
+            super.onBackPressed();
+            getSupportFragmentManager().popBackStack();
         }
 
-        this.doubleBackToExitPressedOnce = true;
 
-        Toast.makeText(ParentActivity.this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
     }
 
 }
